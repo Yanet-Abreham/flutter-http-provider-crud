@@ -19,14 +19,14 @@ class ApiService {
   }
 
   /* Create User */
-  static Future<User> createUser(String name) async {
+  static Future<User> createUser(String newFName, String newLName, String newEmail) async {
     final response = await http.post(
       Uri.parse('$baseUrl/add'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'first_Name': name,
-        'last_Name': 'NewUser',
-        'email': '${name.toLowerCase()}@example.com',
+        'firstName': newFName,
+        'lastName': newLName,
+        'email': newEmail,
       }),
     );
 

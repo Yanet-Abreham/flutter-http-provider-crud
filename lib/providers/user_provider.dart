@@ -28,9 +28,9 @@ class UserProvider with ChangeNotifier {
   }
 
 /* Add User */
-  Future<void> addUser(String name) async {
+  Future<void> addUser(String newFName, String newLName, String newEmail) async {
     try {
-      final newUser = await ApiService.createUser(name);
+      final newUser = await ApiService.createUser(newFName, newLName, newEmail);
       _users.insert(0, newUser);
       notifyListeners();
     } catch (e) {

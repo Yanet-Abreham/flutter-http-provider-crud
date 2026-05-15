@@ -17,8 +17,8 @@ factory User.fromJson(Map<String, dynamic> json) {
   return User(
     id: json['id'] ?? 0,
     email: json['email'] ?? '',
-    first_Name: json['firstName'] ?? json['first_Name'] ?? 'No Name',
-    last_Name: json['lastName'] ?? json['last_Name'] ?? 'No Name',
+    first_Name: json['firstName'] ?? 'No Name',
+    last_Name: json['lastName'] ?? 'No Name',
     avatar: json['image'] ?? 'https://robohash.org/${json['id']}',
   );
  }

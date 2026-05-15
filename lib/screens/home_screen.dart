@@ -219,14 +219,29 @@ void _showDeleteConfirmation(BuildContext context, user) {
 
   /* Create User Dialog */
   void _showAddUserDialog(BuildContext context) {
-    final controller = TextEditingController();
+    final firstNameController = TextEditingController();
+    final lastNameController = TextEditingController();
+    final emailController = TextEditingController();
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Add New User'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(hintText: "Enter name"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              controller: firstNameController,
+              decoration: const InputDecoration(labelText: "First Name"),
+            ),
+            TextField(
+              controller: lastNameController,
+              decoration: const InputDecoration(labelText: "Last Name"),
+            ),
+            TextField(
+              controller: emailController,
+              decoration: const InputDecoration(labelText: "Email"),
+            ),
+          ],
         ),
         actions: [
           TextButton(
@@ -235,8 +250,12 @@ void _showDeleteConfirmation(BuildContext context, user) {
           ),
           ElevatedButton(
             onPressed: () {
-              if (controller.text.isNotEmpty) {
-                context.read<UserProvider>().addUser(controller.text);
+              if (firstNameController.text.isNotEmpty && lastNameController.text.isNotEmpty && emailController.text.isNotEmpty) {
+                context.read<UserProvider>().addUser(
+                  firstNameController.text,
+                  lastNameController.text,
+                  emailController.text
+                );
                 Navigator.pop(context);
               }
             },
