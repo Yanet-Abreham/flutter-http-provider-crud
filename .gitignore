@@ -1,0 +1,67 @@
+# ----------------------------------------------------------------------------
+# Flutter & Dart (Core)
+# ----------------------------------------------------------------------------
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+
+# ----------------------------------------------------------------------------
+# IDEs & Editors
+# ----------------------------------------------------------------------------
+# Visual Studio Code
+.vscode/
+# Note: if you want to share launch configurations with your team, 
+# you can comment out the .vscode/ line above.
+
+# Android Studio / IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# macOS
+.DS_Store
+
+# ----------------------------------------------------------------------------
+# Android Specific
+# ----------------------------------------------------------------------------
+**/android/**/generated/
+**/android/gen/
+**/android/out/
+**/android/app/debug
+**/android/app/profile
+**/android/app/release
+*.keystore
+*.jks
+
+# ----------------------------------------------------------------------------
+# iOS Specific
+# ----------------------------------------------------------------------------
+**/ios/Pods/
+**/ios/.generated/
+**/ios/Flutter/.last_build_id
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Generated.xcconfig
+**/ios/Flutter/flutter_export_environment.sh
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.[mh]
+
+# ----------------------------------------------------------------------------
+# Web Specific
+# ----------------------------------------------------------------------------
+.web_assets/
+
+# ----------------------------------------------------------------------------
+# Miscellaneous
+# ----------------------------------------------------------------------------
+*.log
+*.class
+/coverage/
+/generated_code/
+.env
+*.env
