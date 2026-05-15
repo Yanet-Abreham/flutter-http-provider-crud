@@ -27,82 +27,125 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(UserProvider provider) {
-    if (provider.isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+Widget _buildBody(UserProvider provider) {
+  if (provider.isLoading) {
+    return const Center(child: CircularProgressIndicator());
+  }
 
-    if (provider.errorMessage.isNotEmpty) {
-      return Center(child: Text('Error: ${provider.errorMessage}'));
-    }
-
-    if (provider.users.isEmpty) {
-      return const Center(child: Text('No users found. Press + to add.'));
-    }
-
-    return ListView.builder(
-      itemCount: provider.users.length,
-      itemBuilder: (context, index) {
-        final user = provider.users[index];
-
-        return Dismissible(
-          key: ValueKey(user.id),
-          background: Container(
-            color: Colors.red,
-            alignment: Alignment.centerRight,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: const Icon(Icons.delete, color: Colors.white),
-          ),
-          direction: DismissDirection.endToStart,
-          onDismissed: (direction) {
-            context.read<UserProvider>().removeUser(user.id);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('${user.first_Name} deleted')),
-            );
-          },
-          child: ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(user.avatar),
-            ),
-            title: Text('${user.first_Name} ${user.last_Name}'),
-            subtitle: Text(user.email),
-            trailing: const Icon(Icons.chevron_right),
-            onTap: () => _showActionMenu(context, user),
-          ),
-        );
-      },
+  if (provider.errorMessage.isNotEmpty) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error_outline, size: 40, color: Colors.redAccent),
+          const SizedBox(height: 10),
+          Text('Error: ${provider.errorMessage}'),
+        ],
+      ),
     );
   }
-  
+
+  if (provider.users.isEmpty) {
+    return const Center(child: Text('No users found. Press + to add.'));
+  }
+
+  return ListView.builder(
+    padding: const EdgeInsets.only(top: 8, bottom: 80),
+    itemCount: provider.users.length,
+    itemBuilder: (context, index) {
+      final user = provider.users[index];
+
+      return Dismissible(
+        key: ValueKey(user.id),
+        background: Container(
+          color: Colors.redAccent.withOpacity(0.8),
+          alignment: Alignment.centerRight,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: const Icon(Icons.delete, color: Colors.white),
+        ),
+        direction: DismissDirection.endToStart,
+        onDismissed: (direction) {
+          context.read<UserProvider>().removeUser(user.id);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('User deleted')),
+          );
+        },
+        child: Card(
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            leading: CircleAvatar(
+              radius: 25,
+              backgroundImage: user.avatar.isNotEmpty ? NetworkImage(user.avatar) : null,
+              child: user.avatar.isEmpty ? const Icon(Icons.person) : null,
+            ),
+            title: Text(
+              '${user.first_Name} ${user.last_Name}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(user.email),
+            trailing: Icon(Icons.chevron_right, color: Theme.of(context).colorScheme.primary),
+            onTap: () => _showActionMenu(context, user),
+          ),
+        ),
+      );
+    },
+  );
+}
+
 /* Action Menu for Edit/Delete */
-  void _showActionMenu(BuildContext context, user) {
-    showDialog(
-      context: context, 
-      builder: (context) => SimpleDialog(
-        title: Text('Edit ${user.first_Name}'),
-        children: [
-          SimpleDialogOption(
-            onPressed: () {
-              Navigator.pop(context);
-              _showEditDialog(context, user);
-            },
-            child: const ListTile(
-              leading: Icon(Icons.edit, color: Colors.blue),
-              title: Text('Edit User'),
-            ),
+ 
+void _showActionMenu(BuildContext context, user) {
+  showDialog(
+    context: context,
+    builder: (context) => Dialog(  
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: SizedBox(
+        width: 300, 
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              ),
+                child: Text(
+                  'Manage User', 
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.blueGrey),
+                ),
+              ),
+
+              /* Edit */ 
+              ListTile(
+                leading: const Icon(Icons.edit, color: Colors.blueAccent),
+                title: const Text('Edit User'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showEditDialog(context, user);
+                },
+              ),
+
+              const Divider(height: 1, color: Colors.white10), 
+
+              /* Delete */ 
+              ListTile(
+                leading: const Icon(Icons.delete, color: Colors.redAccent),
+                title: const Text('Delete User'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showDeleteConfirmation(context, user);
+                },
+              ),
+              
+              const SizedBox(height: 8), 
+            ],
           ),
-          SimpleDialogOption(
-            onPressed: () {
-              Navigator.pop(context);
-              _showDeleteConfirmation(context, user);
-            },
-            child: const ListTile(
-              leading: Icon(Icons.delete, color: Colors.red),
-              title: Text('Delete User'),
-            ),
-          ),
-        ],
-      )
+        ),
+      ),
     );
   }
 
