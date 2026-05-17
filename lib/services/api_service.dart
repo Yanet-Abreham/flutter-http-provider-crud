@@ -19,7 +19,7 @@ class ApiService {
   }
 
   /* Create User */
-  static Future<User> createUser(String newFName, String newLName, String newEmail) async {
+  static Future<User> createUser(String newFName, String newLName, String newEmail, String avatarUrl) async {
     final response = await http.post(
       Uri.parse('$baseUrl/add'),
       headers: {'Content-Type': 'application/json'},
@@ -27,11 +27,13 @@ class ApiService {
         'firstName': newFName,
         'lastName': newLName,
         'email': newEmail,
+        'image': avatarUrl,
       }),
     );
 
     if (response.statusCode == 201 || response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
+      final Map<String, dynamic> jsonData = jsonDecode(response.body);
+      return User.fromJson(jsonData);
     } else {
       throw Exception('Failed to create user');
     }
@@ -57,7 +59,8 @@ class ApiService {
   );
 
   if (response.statusCode == 200) {
-    return User.fromJson(jsonDecode(response.body));
+    final Map<String, dynamic> jsonData = jsonDecode(response.body);
+    return User.fromJson(jsonData);
   } else {
     throw Exception('Failed to update user');
   }

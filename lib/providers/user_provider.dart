@@ -30,7 +30,10 @@ class UserProvider with ChangeNotifier {
 /* Add User */
   Future<void> addUser(String newFName, String newLName, String newEmail) async {
     try {
-      final newUser = await ApiService.createUser(newFName, newLName, newEmail);
+      final int seed = DateTime.now().millisecondsSinceEpoch;
+      final String fallbackAvatar = 'https://robohash.org/$seed.png';
+
+      final newUser = await ApiService.createUser(newFName, newLName, newEmail, fallbackAvatar);
       _users.insert(0, newUser);
       notifyListeners();
     } catch (e) {
